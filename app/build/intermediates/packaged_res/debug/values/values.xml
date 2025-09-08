@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#111827</color>
+    <color name="onBackground">#FFFFFF</color>
+    <string name="app_name">Metric Time</string>
+    <style name="Theme.HerodTime" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#111827</item>
+        <item name="android:navigationBarColor">#111827</item>
+    </style>
+</resources>
