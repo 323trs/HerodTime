@@ -105,21 +105,29 @@ class MetricTimeViewModel : ViewModel() {
         val startOfDay = now.toLocalDate().atStartOfDay(zone).toInstant()
         val msPassed = nowInstant.toEpochMilli() - startOfDay.toEpochMilli()
 
-        val year = now.year
-        val dayOfYear = getDayOfYear(now)
-        val daysInYear = if (isLeapYear(year)) 366 else 365
-        val milliday = ((dayOfYear.toDouble() / daysInYear.toDouble()) * 1000.0).toInt()
+    val year = now.year
+    val dayOfYear = getDayOfYear(now)
+    // Metric Time v7 uses a fixed 365-day year when calculating millidays.
+    // We still use the real calendar dayOfYear (so Feb 29 exists in leap years),
+    // but use 365 as the denominator so the milliday scale matches v7.
+    val daysInYearForMilliday = 365
+    val milliday = ((dayOfYear.toDouble() / daysInYearForMilliday.toDouble()) * 1000.0).toInt()
 
-        // Million day logic
-        val hoursInDay = if (millionDayMode) 10 else 24
-        val minutesInHour = 60
-        val secondsInMinute = 60
-        val msInDay = hoursInDay * minutesInHour * secondsInMinute * 1000
+    // Metric mapping: map the full 24-hour common day onto the metric day length
+    val hoursInDay = if (millionDayMode) 10 else 24
+    val minutesInHour = if (millionDayMode) 100 else 60
+    val secondsInMinute = if (millionDayMode) 100 else 60
 
-        val msToday = msPassed % msInDay
-        val hour = (msToday / (minutesInHour * secondsInMinute * 1000)).toInt()
-        val minute = ((msToday / (secondsInMinute * 1000)) % minutesInHour).toInt()
-        val second = ((msToday / 1000) % secondsInMinute).toInt()
+    // fraction of the common (24h) day that has passed since local midnight
+    val msPerCommonDay = 24L * 60L * 60L * 1000L
+    val fractionOfCommonDay = msPassed.toDouble() / msPerCommonDay.toDouble()
+
+    // total metric seconds into the metric day
+    val totalMetricSeconds = (fractionOfCommonDay * hoursInDay * minutesInHour * secondsInMinute).toLong()
+
+    val hour = (totalMetricSeconds / (minutesInHour * secondsInMinute)).toInt()
+    val minute = ((totalMetricSeconds / secondsInMinute) % minutesInHour).toInt()
+    val second = (totalMetricSeconds % secondsInMinute).toInt()
 
         return MetricState(
             year = year,
