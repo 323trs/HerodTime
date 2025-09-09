@@ -42,7 +42,8 @@ class MetricTimeViewModel : ViewModel() {
     val metricState: StateFlow<MetricState> = _metricState.asStateFlow()
 
     // Million day mode: true = 10h day, false = 24h day
-    var millionDayMode: Boolean = false
+    // Default to true so the app shows Metric Time (10-hour day) by default
+    var millionDayMode: Boolean = true
 
     // Timer
     private var timerJob: kotlinx.coroutines.Job? = null
