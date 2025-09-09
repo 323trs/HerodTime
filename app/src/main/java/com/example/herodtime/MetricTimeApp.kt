@@ -94,6 +94,11 @@ fun MetricTimeApp(viewModel: MetricTimeViewModel = viewModel()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 TimerControls(state = state, onStart = { secs -> viewModel.startTimer(secs) }, onStop = { viewModel.stopTimer() })
 
+                Spacer(modifier = Modifier.height(8.dp))
+                if (state.timerRunning) {
+                    Text(text = formatSeconds(state.timerSecondsLeft), color = Color(0xFF10B981), fontSize = 18.sp)
+                }
+
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(text = "Alarm", color = Color.White, fontWeight = FontWeight.Bold)
@@ -109,6 +114,18 @@ fun MetricTimeApp(viewModel: MetricTimeViewModel = viewModel()) {
                 Text(text = "1 Minute = 100 Seconds", color = Color(0xFF9CA3AF))
             }
         }
+    }
+}
+
+private fun formatSeconds(sec: Long): String {
+    if (sec <= 0) return "00:00"
+    val s = sec % 60
+    val m = (sec / 60) % 60
+    val h = sec / 3600
+    return if (h > 0) {
+        "%d:%02d:%02d".format(h, m, s)
+    } else {
+        "%02d:%02d".format(m, s)
     }
 }
 

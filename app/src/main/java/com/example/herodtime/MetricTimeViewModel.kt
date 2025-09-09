@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -46,6 +49,15 @@ class MetricTimeViewModel : ViewModel() {
 
     // Alarm
     private var alarmJob: kotlinx.coroutines.Job? = null
+
+    // Events for the Activity to observe (notifications / sounds)
+    sealed class NotificationEvent {
+        object TimerFinished : NotificationEvent()
+        object AlarmTriggered : NotificationEvent()
+    }
+
+    private val _events = MutableSharedFlow<NotificationEvent>()
+    val events: SharedFlow<NotificationEvent> = _events.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -118,7 +130,11 @@ class MetricTimeViewModel : ViewModel() {
                 delay(1000L)
                 _metricState.value = _metricState.value.copy(timerSecondsLeft = _metricState.value.timerSecondsLeft - 1)
             }
-            _metricState.value = _metricState.value.copy(timerRunning = false)
+                // timer finished
+                _metricState.value = _metricState.value.copy(timerRunning = false)
+                if (_metricState.value.timerSecondsLeft <= 0L) {
+                    _events.tryEmit(NotificationEvent.TimerFinished)
+                }
         }
     }
 
@@ -148,7 +164,7 @@ class MetricTimeViewModel : ViewModel() {
             val m = s.metricMinutes.toInt()
             if (h == s.alarmHour && m == s.alarmMinute) {
                 _metricState.value = s.copy(alarmTriggered = true)
-                // You can add notification or sound logic here
+                viewModelScope.launch { _events.emit(NotificationEvent.AlarmTriggered) }
             }
         }
     }
