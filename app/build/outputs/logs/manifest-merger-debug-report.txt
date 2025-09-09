@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-17:12
-INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-17:12
-INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-17:12
-INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-17:12
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-20:12
+INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-20:12
+INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-20:12
+INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:1-20:12
 MERGED from [androidx.compose.ui:ui-tooling-android:1.5.3] /home/codespace/.gradle/caches/8.14.2/transforms/89c83061aa5ee4a7da47888837e0ef06/transformed/jetified-ui-tooling-release/AndroidManifest.xml:17:1-28:12
 MERGED from [com.google.android.material:material:1.9.0] /home/codespace/.gradle/caches/8.14.2/transforms/4c13cfe278468289df0c3618d7740ced/transformed/material-1.9.0/AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/codespace/.gradle/caches/8.14.2/transforms/01b91b3320989018ec26d238cc0087de/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
@@ -80,9 +80,13 @@ MERGED from [androidx.print:print:1.0.0] /home/codespace/.gradle/caches/8.14.2/t
 		INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:5:5-77
+	android:name
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:5:22-74
 application
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:4:5-15:19
-INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:4:5-15:19
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:7:5-18:19
+INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:7:5-18:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.5.3] /home/codespace/.gradle/caches/8.14.2/transforms/89c83061aa5ee4a7da47888837e0ef06/transformed/jetified-ui-tooling-release/AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.5.3] /home/codespace/.gradle/caches/8.14.2/transforms/89c83061aa5ee4a7da47888837e0ef06/transformed/jetified-ui-tooling-release/AndroidManifest.xml:22:5-26:19
 MERGED from [com.google.android.material:material:1.9.0] /home/codespace/.gradle/caches/8.14.2/transforms/4c13cfe278468289df0c3618d7740ced/transformed/material-1.9.0/AndroidManifest.xml:24:5-20
@@ -106,27 +110,27 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /home/codespace/.gradle/cac
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.0] /home/codespace/.gradle/caches/8.14.2/transforms/85a0be640a3879692fec7b9e260edd86/transformed/core-1.13.0/AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:6:9-36
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:9:9-36
 	android:allowBackup
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:5:9-35
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:8:9-35
 	android:theme
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:7:9-47
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:10:9-47
 activity#com.example.herodtime.MainActivity
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:8:9-14:20
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:11:9-17:20
 	android:exported
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:9:13-36
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:12:13-36
 	android:name
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:8:19-47
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:11:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:10:13-13:29
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:13:13-16:29
 action#android.intent.action.MAIN
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:11:17-69
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:14:17-69
 	android:name
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:11:25-66
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:14:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:12:17-77
+ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:15:17-77
 	android:name
-		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:12:27-74
+		ADDED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml:15:27-74
 uses-sdk
 INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /workspaces/HerodTime/app/src/main/AndroidManifest.xml
