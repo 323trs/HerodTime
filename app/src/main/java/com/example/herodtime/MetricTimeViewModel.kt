@@ -54,10 +54,18 @@ class MetricTimeViewModel : ViewModel() {
     sealed class NotificationEvent {
         object TimerFinished : NotificationEvent()
         object AlarmTriggered : NotificationEvent()
+    data class Test(val title: String, val message: String) : NotificationEvent()
     }
 
     private val _events = MutableSharedFlow<NotificationEvent>()
     val events: SharedFlow<NotificationEvent> = _events.asSharedFlow()
+
+    // Helper to emit a test notification event from UI for debugging
+    fun emitTestNotification(title: String, message: String) {
+        viewModelScope.launch {
+            _events.emit(NotificationEvent.Test(title, message))
+        }
+    }
 
     init {
         viewModelScope.launch {

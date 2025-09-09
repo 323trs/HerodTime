@@ -43,13 +43,18 @@ class MainActivity : ComponentActivity() {
                 when (ev) {
                     is MetricTimeViewModel.NotificationEvent.TimerFinished -> showNotification("Timer finished", "Your timer has completed.")
                     is MetricTimeViewModel.NotificationEvent.AlarmTriggered -> showNotification("Alarm", "Alarm time reached")
+                    is MetricTimeViewModel.NotificationEvent.Test -> showNotification(ev.title, ev.message)
                 }
             }
         }
 
         setContent {
             HerodTimeTheme {
-                MetricTimeApp(viewModel = vm)
+                MetricTimeApp(
+                    viewModel = vm,
+                    onOpenSettings = { openAppNotificationSettings() },
+                    onTest = { vm.emitTestNotification("Test", "This is a test notification") }
+                )
             }
         }
     }
@@ -76,5 +81,13 @@ class MainActivity : ComponentActivity() {
             .setSound(defaultSoundUri)
 
         notificationManager.notify((System.currentTimeMillis() % 10000).toInt(), builder.build())
+    }
+
+    private fun openAppNotificationSettings() {
+        val intent = android.content.Intent()
+        intent.action = android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        intent.putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, packageName)
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }
