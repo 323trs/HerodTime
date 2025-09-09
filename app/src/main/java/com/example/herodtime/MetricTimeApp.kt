@@ -3,6 +3,11 @@ package com.example.herodtime
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +19,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -79,9 +86,22 @@ fun MetricTimeApp(viewModel: MetricTimeViewModel = viewModel()) {
                 modifier = Modifier.padding(vertical = 12.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Controls: Timer and Alarm
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Timer", color = Color.White, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(6.dp))
+                TimerControls(state = state, onStart = { secs -> viewModel.startTimer(secs) }, onStop = { viewModel.stopTimer() })
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(text = "Alarm", color = Color.White, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(6.dp))
+                AlarmControls(state = state, onSet = { h, m -> viewModel.setAlarm(h, m) }, onClear = { viewModel.clearAlarm() })
+
+                Spacer(modifier = Modifier.height(12.dp))
+
                 Text(text = "How it works", color = Color.White, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "1 Day = 10 Hours", color = Color(0xFF9CA3AF))
@@ -89,5 +109,38 @@ fun MetricTimeApp(viewModel: MetricTimeViewModel = viewModel()) {
                 Text(text = "1 Minute = 100 Seconds", color = Color(0xFF9CA3AF))
             }
         }
+    }
+}
+
+@Composable
+private fun TimerControls(state: MetricState, onStart: (Long) -> Unit, onStop: () -> Unit) {
+    var input by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OutlinedTextField(
+            value = input,
+            onValueChange = { input = it.filter { ch -> ch.isDigit() } },
+            label = { Text("seconds") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.width(120.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(onClick = { val s = input.toLongOrNull() ?: 0L; onStart(s) }) { Text("Start") }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(onClick = onStop) { Text("Stop") }
+    }
+}
+
+@Composable
+private fun AlarmControls(state: MetricState, onSet: (Int, Int) -> Unit, onClear: () -> Unit) {
+    var hour by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+    var minute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OutlinedTextField(value = hour, onValueChange = { hour = it.filter { ch -> ch.isDigit() } }, label = { Text("hr") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(72.dp))
+        Spacer(modifier = Modifier.width(6.dp))
+        OutlinedTextField(value = minute, onValueChange = { minute = it.filter { ch -> ch.isDigit() } }, label = { Text("min") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.width(72.dp))
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(onClick = { onSet(hour.toIntOrNull() ?: 0, minute.toIntOrNull() ?: 0) }) { Text("Set") }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(onClick = onClear) { Text("Clear") }
     }
 }

@@ -50,7 +50,17 @@ class MetricTimeViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             while (true) {
-                _metricState.value = calculateMetric()
+                val base = calculateMetric()
+                val prev = _metricState.value
+                // preserve timer and alarm fields across recalculations
+                _metricState.value = base.copy(
+                    timerRunning = prev.timerRunning,
+                    timerSecondsLeft = prev.timerSecondsLeft,
+                    alarmSet = prev.alarmSet,
+                    alarmHour = prev.alarmHour,
+                    alarmMinute = prev.alarmMinute,
+                    alarmTriggered = prev.alarmTriggered
+                )
                 checkAlarm()
                 delay(100L)
             }
@@ -102,41 +112,42 @@ class MetricTimeViewModel : ViewModel() {
     // Timer logic
     fun startTimer(seconds: Long) {
         timerJob?.cancel()
-        _metricState.value.timerRunning = true
-        _metricState.value.timerSecondsLeft = seconds
+        _metricState.value = _metricState.value.copy(timerRunning = true, timerSecondsLeft = seconds)
         timerJob = viewModelScope.launch {
             while (_metricState.value.timerSecondsLeft > 0 && _metricState.value.timerRunning) {
                 delay(1000L)
                 _metricState.value = _metricState.value.copy(timerSecondsLeft = _metricState.value.timerSecondsLeft - 1)
             }
-            _metricState.value.timerRunning = false
+            _metricState.value = _metricState.value.copy(timerRunning = false)
         }
     }
 
     fun stopTimer() {
-        timerJob?.cancel()
-        _metricState.value.timerRunning = false
+    timerJob?.cancel()
+    _metricState.value = _metricState.value.copy(timerRunning = false)
     }
 
     // Alarm logic
     fun setAlarm(hour: Int, minute: Int) {
-        _metricState.value.alarmSet = true
-        _metricState.value.alarmHour = hour
-        _metricState.value.alarmMinute = minute
-        _metricState.value.alarmTriggered = false
+        _metricState.value = _metricState.value.copy(
+            alarmSet = true,
+            alarmHour = hour,
+            alarmMinute = minute,
+            alarmTriggered = false
+        )
     }
 
     fun clearAlarm() {
-        _metricState.value.alarmSet = false
-        _metricState.value.alarmTriggered = false
+    _metricState.value = _metricState.value.copy(alarmSet = false, alarmTriggered = false)
     }
 
     private fun checkAlarm() {
-        if (_metricState.value.alarmSet && !_metricState.value.alarmTriggered) {
-            val h = _metricState.value.metricHours.toInt()
-            val m = _metricState.value.metricMinutes.toInt()
-            if (h == _metricState.value.alarmHour && m == _metricState.value.alarmMinute) {
-                _metricState.value.alarmTriggered = true
+        val s = _metricState.value
+        if (s.alarmSet && !s.alarmTriggered) {
+            val h = s.metricHours.toInt()
+            val m = s.metricMinutes.toInt()
+            if (h == s.alarmHour && m == s.alarmMinute) {
+                _metricState.value = s.copy(alarmTriggered = true)
                 // You can add notification or sound logic here
             }
         }
